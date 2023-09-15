@@ -8,6 +8,13 @@ packages = [{include = "pdf_quick_responserer"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+fastapi = "^0.103.1"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+pydantic = "==1.*"
+psycopg2-binary = "^2.9.7"
+sqlalchemy = "^2.0.20"
+python-multipart = "^0.0.6"
+pypdf2 = "^3.0.1"
 
 
 [build-system]
