@@ -25,20 +25,26 @@ app = FastAPI()
 
 app.include_router(tags.router, prefix='/api')
 app.include_router(notes.router, prefix='/api')
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount('/static', StaticFiles(directory='static'), name='static')
 
 
-@app.post("/uploadfile/")
+@app.post('/uploadfile/')
 async def create_upload_file(file: UploadFile = File()) -> dict:
-    pathlib.Path("uploads").mkdir(exist_ok=True)
-    file_path = f"uploads/{file.filename}"
-    with open(file_path, "wb") as f:
-        f.write(await file.read())
+    pathlib.Path('uploads').mkdir(exist_ok=True)
+    file_path = f'uploads/{file.filename}'
 
-    text = get_txt_from_pdf(file_path) # 'example.pdf'
-    print(text)
+    file_type = file.filename.split('.')[-1].lower()
+    if file_type == 'pdf':
+        with open(file_path, 'wb') as f:
+            f.write(await file.read())
 
-    return {"file_text": text}  # file_path
+        text = get_txt_from_pdf(file_path) # 'example.pdf'
+        print(text)
+
+        return {'file_text': text}  # file_path
+    
+    else:
+        return {'file_text': f'Incorrect file-type. {file_type} not a PDF.'}  # file_path
 
 
 @app.get('/')
